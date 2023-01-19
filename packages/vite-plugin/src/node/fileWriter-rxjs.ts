@@ -21,6 +21,7 @@ import { outputFiles } from './fileWriter-filesMap'
 import { getFileName, getOutputPath, getViteUrl } from './fileWriter-utilities'
 import { join } from './path'
 import { CrxDevAssetId, CrxDevScriptId, CrxPlugin } from './types'
+import {outputFile} from "fs-extra";
 
 /* ----------------- SERVER EVENTS ----------------- */
 
@@ -159,12 +160,30 @@ function prepScript(
         const [imports] = lexer.parse(code, fileName)
         const depSet = new Set(deps)
         const magic = new MagicString(code)
-        for (const i of imports)
+        for (const i of imports) {
           if (i.n) {
-            depSet.add(i.n)
-            const fileName = getFileName({ type: 'module', id: i.n })
-            magic.overwrite(i.s, i.e, `/${fileName}`)
+            depSet.add(i.n);
+            const fileName = getFileName({type: "module", id: i.n});
+
+            function ss(str: string, from: number, to: number) {
+              let subs = "";
+              for (let i = from; i < to; i++) {
+                subs += str[i];
+              }
+
+              return subs;
+            }
+
+            const beforeImport = ss(code, i.s, i.e);
+
+            magic.overwrite(i.s, i.e, beforeImport.replace(i.n, `/${fileName}`));
+
+            // if (code !== magic.toString()) {
+            //   await outputFile(target + "_orig.js", code, {encoding: "utf8"});
+            //   await outputFile(target + "_orig_mg1.js", magic.toString(), {encoding: "utf8"});
+            // }
           }
+        }
         return { target, source: magic.toString(), deps: [...depSet] }
       }),
     )
