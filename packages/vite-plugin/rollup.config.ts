@@ -4,9 +4,9 @@ import resolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
 import _debug from 'debug'
 import fs from 'fs-extra'
-import jsesc from 'jsesc'
-import { posix as path } from 'path'
-import { defineConfig, Plugin, rollup, RollupOptions } from 'rollup'
+import jsesc from "jsesc";
+import path from "path";
+import {defineConfig, Plugin, rollup, RollupOptions} from "rollup";
 import esbuild from 'rollup-plugin-esbuild'
 import dts from 'rollup-plugin-dts'
 
@@ -52,18 +52,21 @@ const bundleClientCode = (): Plugin => {
     },
     async load(_id) {
       if (_id.startsWith(PREFIX)) {
-        const input = _id.slice(PREFIX.length)
-        const format = path.dirname(input).split('/').pop() as
-          | 'es'
-          | 'iife'
-          | 'html'
+        const url = new URL(_id.slice(PREFIX.length));
+        const filepath = url.pathname;
+        const input = path.normalize(filepath);
+        const dirname = path.dirname(input);
+        const format = dirname.split(path.sep).pop() as
+          | "es"
+          | "iife"
+          | "html";
 
-        let result: string
-        if (format === 'html') {
-          result = await fs.readFile(input, { encoding: 'utf8' })
+        let result: string;
+        if (format === "html") {
+          result = await fs.readFile(input, {encoding: "utf8"});
         } else {
-          const build = await rollup({ ...options, input })
-          const { output } = await build.generate({ format })
+          const build = await rollup({...options, input});
+          const {output} = await build.generate({format});
           result = output[0].code
         }
 
