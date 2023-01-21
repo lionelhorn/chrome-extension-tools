@@ -165,23 +165,13 @@ function prepScript(
             depSet.add(i.n);
             const fileName = getFileName({type: "module", id: i.n});
 
-            function ss(str: string, from: number, to: number) {
-              let subs = "";
-              for (let i = from; i < to; i++) {
-                subs += str[i];
-              }
+            // https://github.com/crxjs/chrome-extension-tools/issues/608#issuecomment-1398498360
+            // NOTE: Temporary fix for this bug: https://github.com/guybedford/es-module-lexer/issues/144
+            const fullImport = code.substring(i.s, i.e);
+            magic.overwrite(i.s, i.e, fullImport.replace(i.n, `/${fileName}`));
 
-              return subs;
-            }
-
-            const beforeImport = ss(code, i.s, i.e);
-
-            magic.overwrite(i.s, i.e, beforeImport.replace(i.n, `/${fileName}`));
-
-            // if (code !== magic.toString()) {
-            //   await outputFile(target + "_orig.js", code, {encoding: "utf8"});
-            //   await outputFile(target + "_orig_mg1.js", magic.toString(), {encoding: "utf8"});
-            // }
+            // NOTE: use this once the bug is fixed
+            // magic.overwrite(i.s, i.e, `/${fileName}`)
           }
         }
         return { target, source: magic.toString(), deps: [...depSet] }
