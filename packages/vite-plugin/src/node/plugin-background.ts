@@ -31,7 +31,7 @@ export const pluginBackground: CrxPluginFn = () => {
       },
       load(id) {
         if (id === workerClientId) {
-          const base = `http://localhost:${config.server.port}/`
+          const base = `https://localhost:${config.server.port}/`;
           return defineClientValues(
             workerHmrClient.replace('__BASE__', JSON.stringify(base)),
             config,
@@ -56,11 +56,11 @@ export const pluginBackground: CrxPluginFn = () => {
             throw new Error('server port is undefined in watch mode')
 
           // development, required to define env vars
-          loader = `import 'http://localhost:${port}/@vite/env';\n`
+          loader = `import 'https://localhost:${port}/@vite/env';\n`;
           // development, required hmr client
-          loader += `import 'http://localhost:${port}${workerClientId}';\n`
+          loader += `import 'https://localhost:${port}${workerClientId}';\n`;
           // development, optional service worker
-          if (worker) loader += `import 'http://localhost:${port}/${worker}';\n`
+          if (worker) loader += `import 'https://localhost:${port}/${worker}';\n`;
         } else if (worker) {
           // production w/ service worker loader at root, see comment at top of file.
           loader = `import './${worker}';\n`

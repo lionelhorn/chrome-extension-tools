@@ -35,8 +35,8 @@ self.addEventListener('fetch', (fetchEvent) => {
  */
 async function sendToServer(url: URL): Promise<Response> {
   // change the url to point to the dev server
-  url.protocol = 'http:'
-  url.host = 'localhost'
+  url.protocol = "https:";
+  url.host = "localhost";
   url.port = __SERVER_PORT__
   // add a timestamp to force Chrome to do a new request
   url.searchParams.set('t', Date.now().toString())

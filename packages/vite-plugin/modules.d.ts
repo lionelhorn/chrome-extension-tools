@@ -5,8 +5,8 @@ declare module 'client/*' {
   export default code
 }
 
-declare module 'http://localhost:%PORT%/*'
-declare module '*/%PATH%'
+declare module "https://localhost:%PORT%/*"
+declare module "*/%PATH%"
 
 declare module 'connect-injector' {
   import { ServerResponse } from 'http'
