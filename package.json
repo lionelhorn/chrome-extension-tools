@@ -1,6 +1,6 @@
 {
   "name": "crxjs-monorepo",
-  "private": "true",
+  "private": true,
   "keywords": [
     "rollup-plugin",
     "vite-plugin",
@@ -32,12 +32,5 @@
   },
   "devDependencies": {
     "vitest": "0.24.3"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "jest"
-      ]
-    }
   }
 }
