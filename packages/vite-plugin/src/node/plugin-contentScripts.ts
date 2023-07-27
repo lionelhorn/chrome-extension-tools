@@ -54,7 +54,7 @@ export const pluginContentScripts: CrxPluginFn = () => {
           try {
             // rollup compiles this correctly for cjs output
             const react = await import('@vitejs/plugin-react')
-            // auto config for react users
+            // auto config for react website-users
             preambleCode = react.default.preambleCode
           } catch (error) {
             preambleCode = false

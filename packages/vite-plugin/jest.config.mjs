@@ -36,7 +36,7 @@ const moduleNameMaps = Object.fromEntries(
 )
 
 export default {
-  // For PNPM users, need to add '.*' to get the last instance of the ignored module
+  // For PNPM website-users, need to add '.*' to get the last instance of the ignored module
   transformIgnorePatterns: [`node_modules/(?!.*${esModules})`],
   globalSetup: './tests/jest.globalSetup.ts',
   moduleNameMapper: {
